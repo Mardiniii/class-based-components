@@ -1,16 +1,13 @@
 import { Fragment, useState, useEffect, Component } from "react";
 
 import classes from "./UserFinder.module.css";
+import UsersContext from "../store/users-context";
 
 import Users from "./Users";
 
-const DUMMY_USERS = [
-  { id: "u1", name: "Max" },
-  { id: "u2", name: "Manuel" },
-  { id: "u3", name: "Julie" },
-];
-
 class UserFinder extends Component {
+  static contextType = UsersContext;
+
   constructor() {
     super();
     this.state = {
@@ -23,14 +20,14 @@ class UserFinder extends Component {
   // It will render only once
   componentDidMount() {
     // Send http request...
-    this.setState({ filteredUsers: DUMMY_USERS });
+    this.setState({ filteredUsers: this.context.users });
   }
 
   // This method is call when the component is re-evaluated
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchTerm !== this.state.searchTerm) {
       this.setState({
-        filteredUsers: DUMMY_USERS.filter((user) =>
+        filteredUsers: this.context.users.filter((user) =>
           user.name.includes(this.state.searchTerm)
         ),
       });
